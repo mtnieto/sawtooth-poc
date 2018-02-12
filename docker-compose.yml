@@ -2,6 +2,11 @@
 version: "2.1"
 
 services:
+
+  validator:
+    privileged: true
+    build: validatorN
+    command: sh ./etc/sawtooth/validator.sh
   validator0:
     image: hyperledger/sawtooth-validator:latest
     container_name: validator0
@@ -26,17 +31,29 @@ services:
           --bind network:tcp://eth0:8800 \
         \""
   validator1:
-    build: validator1
+    extends: 
+      service: validator
     container_name: validator1
     ports:
       - "4005:4004"
     depends_on:
-      - validator0
-    command:
-      sh ./etc/sawtooth/validator.sh
+      - validator0    
     networks:
       app_net:
         ipv4_address: 172.16.239.15
+
+  validator2:
+    extends: 
+      service: validator
+    container_name: validator2
+    ports:
+      - "4006:4004"
+    depends_on:
+      - validator0
+    networks:
+      app_net:
+        ipv4_address: 172.16.239.16
+  
 networks: 
   app_net:
     driver: bridge
