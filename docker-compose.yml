@@ -9,6 +9,8 @@ services:
       - 4004
     ports:
       - "4004:4004"
+      - "8800:8800"
+      
     networks:
       app_net:
         ipv4_address: 172.16.239.14
